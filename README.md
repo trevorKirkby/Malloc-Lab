@@ -2,8 +2,7 @@
 # CS:APP Malloc Lab
 # Handout files for students
 
-### Copyright (c) 2002, R. Bryant and D. O'Hallaron, All rights reserved.
-### May not be used, modified, or copied without permission.
+##### Copyright (c) 2002, R. Bryant and D. O'Hallaron, All rights reserved.<br>May not be used, modified, or copied without permission.
 
 ## Main Files:
 
@@ -35,11 +34,11 @@ To build the driver, type "make" to the shell.
 
 To run the driver on a tiny test trace:
 
-	unix> mdriver -V -f short1-bal.rep
+	unix> ./mdriver -V -f short1-bal.rep
 
 The -V option prints out helpful tracing and summary information.
 
 To get a list of the driver flags:
 
-	unix> mdriver -h
+	unix> ./mdriver -h
 
