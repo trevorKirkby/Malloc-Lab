@@ -80,6 +80,7 @@ void mm_free(void *ptr)
  */
 void *mm_realloc(void *ptr, size_t size)
 {
+    // this is a comment in the realloc() function
     void *oldptr = ptr;
     void *newptr;
     size_t copySize;
