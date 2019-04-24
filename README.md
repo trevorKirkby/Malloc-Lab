@@ -1,11 +1,11 @@
 
-#CS:APP Malloc Lab
-#Handout files for students
+# CS:APP Malloc Lab
+# Handout files for students
 
-###Copyright (c) 2002, R. Bryant and D. O'Hallaron, All rights reserved.
+### Copyright (c) 2002, R. Bryant and D. O'Hallaron, All rights reserved.
 ### May not be used, modified, or copied without permission.
 
-##Main Files:
+## Main Files:
 
 mm.{c,h}	
 	Your solution malloc package. mm.c is the file that you
@@ -20,7 +20,7 @@ short{1,2}-bal.rep
 Makefile	
 	Builds the driver
 
-##Other support files for the driver
+## Other support files for the driver
 
 config.h	Configures the malloc lab driver
 fsecs.{c,h}	Wrapper function for the different timer packages
@@ -29,7 +29,7 @@ fcyc.{c,h}	Timer functions based on cycle counters
 ftimer.{c,h}	Timer functions based on interval timers and gettimeofday()
 memlib.{c,h}	Models the heap and sbrk function
 
-##Building and running the driver
+## Building and running the driver
 
 To build the driver, type "make" to the shell.
 
