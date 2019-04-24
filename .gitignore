@@ -1,3 +1,8 @@
+# Ignoring files without extensions (likely executables)
+*
+!/**/
+!*.*
+
 # Prerequisites
 *.d
 
