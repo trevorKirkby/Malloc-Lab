@@ -73,6 +73,7 @@ void *mm_malloc(size_t size)
  */
 void mm_free(void *ptr)
 {
+// this is a comment in the free() function
 }
 
 /*
