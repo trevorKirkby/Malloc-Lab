@@ -49,6 +49,7 @@ team_t team = {
  */
 int mm_init(void) //mm_init branch
 {
+    mem_init();
     return 0;
 }
 
