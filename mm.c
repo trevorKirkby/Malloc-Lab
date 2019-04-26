@@ -23,16 +23,16 @@
  * provide your team information in the following struct.
  ********************************************************/
 team_t team = {
-    /* Team name */
-    "Treblajay",
-    /* First member's full name */
-    "Trevor Kirkby",
-    /* First member's email address */
-    "tkirkby@westmont.edu",
-    /* Second member's full name (leave blank if none) */
-    "Jason Watts",
-    /* Second member's email address (leave blank if none) */
-    "jawatts@westmont.edu"
+  /* Team name */
+  "Treblajay",
+  /* First member's full name */
+  "Trevor Kirkby",
+  /* First member's email address */
+  "tkirkby@westmont.edu",
+  /* Second member's full name (leave blank if none) */
+  "Jason Watts",
+  /* Second member's email address (leave blank if none) */
+  "jawatts@westmont.edu"
 };
 
 /* single word (4) or double word (8) alignment */
@@ -41,7 +41,6 @@ team_t team = {
 /* rounds up to the nearest multiple of ALIGNMENT */
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~0x7)
 
-
 #define SIZE_T_SIZE (ALIGN(sizeof(size_t)))
 
 /*
@@ -49,8 +48,8 @@ team_t team = {
  */
 int mm_init(void) //mm_init branch
 {
-    mem_init();
-    return 0;
+  mem_init();
+  return 0;
 }
 
 /*
@@ -59,14 +58,14 @@ int mm_init(void) //mm_init branch
  */
 void *mm_malloc(size_t size)
 {
-    int newsize = ALIGN(size + SIZE_T_SIZE);
-    void *p = mem_sbrk(newsize);
-    if (p == (void *)-1)
-	return NULL;
-    else {
-        *(size_t *)p = size;
-        return (void *)((char *)p + SIZE_T_SIZE);
-    }
+  int newsize = ALIGN(size + SIZE_T_SIZE);
+  void *p = mem_sbrk(newsize);
+  if (p == (void *)-1) {
+    return NULL;
+  } else {
+    *(size_t *)p = size;
+    return (void *)((char *)p + SIZE_T_SIZE);
+  }
 }
 
 /*
@@ -81,17 +80,19 @@ void mm_free(void *ptr)
  */
 void *mm_realloc(void *ptr, size_t size)
 {
-    void *oldptr = ptr;
-    void *newptr;
-    size_t copySize;
+  void *oldptr = ptr;
+  void *newptr;
+  size_t copySize;
 
-    newptr = mm_malloc(size);
-    if (newptr == NULL)
-      return NULL;
-    copySize = *(size_t *)((char *)oldptr - SIZE_T_SIZE);
-    if (size < copySize)
-      copySize = size;
-    memcpy(newptr, oldptr, copySize);
-    mm_free(oldptr);
-    return newptr;
+  newptr = mm_malloc(size);
+  if (newptr == NULL) {
+    return NULL;
+  }
+  copySize = *(size_t *)((char *)oldptr - SIZE_T_SIZE);
+  if (size < copySize) {
+    copySize = size;
+  }
+  memcpy(newptr, oldptr, copySize);
+  mm_free(oldptr);
+  return newptr;
 }
