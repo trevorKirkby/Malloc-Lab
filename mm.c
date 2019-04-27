@@ -44,6 +44,7 @@ team_t team = {
 #define BLOCKSIZE(block) ((*block) & ~(1<<31)) //I am treating the first byte of each memory block as a block object
 #define INNERSIZE(block) (BLOCKSIZE(block) - 2*sizeof(long)) //The size of a block, minus the size of the header and footer
 #define INNER(block) (block + 1)    //A pointer to the inside of the block
+#define OUTER(block) (block - 1)    //A pointer to the outside of the block
 #define IS_ALLOC(block) ((*block)>>31)         //The sign bit represents whether it is allocated or not
 #define ALLOC(block) *block = (*block) | (1<<31); *FOOT(block) = *block //Mark a block as allocated
 #define FREE(block) *block = ((*block) & ~(1<<31)); *FOOT(block) = *block //Mark a block as unallocated. I could hypothetically roll these two calls into a single toggle function, but I suspect this method will make debugging easier
@@ -145,12 +146,17 @@ void *mm_malloc(size_t size)
   } else {
     printf("Found a free node\n");
     //TODO: Do a deletion operation on the linked list
+    *LL_NEXT(PREV_FREE(min)) = LL_NEXT(min); //TODO: Also initialize the linked list for the second half of a split block.
+    *LL_PREV(NEXT_FREE(min)) = LL_PREV(min);
     if (INNERSIZE(min) - size < INNER_MIN) { //If the block we found is either the right size or close enough to the right size that the bit we would split off would be too small to form its own block, then just return that block
       printf("No split required\n");
       return (void *)min;
     } else { //Otherwise, we need to split the block
       printf("Split required\n");
       split(min, ALIGN_FLOOR(size, INNER_MIN)); //Which, fortunately, is already abstracted into a function call
+      *LL_PREV(free_nodes_head) = NEXT(min);
+      *LL_NEXT(NEXT(min)) = free_nodes_head;
+      free_nodes_head = NEXT(min); //Add the newly split off block into the linked list.
       ALLOC(min);
       return (void *)INNER(min);
     }
@@ -165,25 +171,31 @@ void mm_free(void *ptr)
   if (ptr == NULL) { //Don't bother trying to free a null pointer
     return;
   }
-  long *block = (long *)ptr;
+  long *block = OUTER((long *)ptr);
   printf("Address: %x\n", block);
-  printf("Freeing %x bytes...\n", BLOCKSIZE(block));
+  printf("Freeing %d bytes...\n", BLOCKSIZE(block));
   printf("Setting bytes as not allocated\n");
   FREE(block); //Mark the block as unallocated
+  printf("Handling merges...\n");
   if (!IS_ALLOC(NEXT(block)) && NEXT(block) <= UPPER) {
+    printf("Next block is free %x\n", NEXT(block));
     long *old = NEXT(block);
     MERGE(block, NEXT(block));
+    printf("Updating free linked list...\n");
     *LL_PREV(block) = PREV_FREE(old);
     *LL_NEXT(block) = NEXT_FREE(old);
     if (!IS_ALLOC(PREV(block)) && PREV(block) >= LOWER) {
+      printf("Previous block is free %x\n", PREV(block));
       MERGE(PREV(block), block);
     }
     return; //The new block is merged in with other blocks and assumes the linked list data of the blocks it absorbed
   }
   if (!IS_ALLOC(PREV(block)) && PREV(block) >= LOWER) {
+    printf("Previous block is free %x\n", PREV(block));
     MERGE(PREV(block), block);
     return; //The new block is merged in with other blocks and assumes the linked list data of the blocks it absorbed
   }
+  printf("Attending to linked list...\n");
   if (free_nodes_head) {
     printf("Updating linked list...\n");
     *LL_PREV(free_nodes_head) = block;
