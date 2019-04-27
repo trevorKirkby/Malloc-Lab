@@ -33,6 +33,10 @@ team_t team = {
   "Jason Watts",
   /* Second member's email address (leave blank if none) */
   "jawatts@westmont.edu"
+  /* Third member's full name (leave blank if none) */
+  "Blake Dayman",
+  /* Third member's email address (leave blank if none) */
+  "bdayman@westmont.edu"
 };
 
 /* single word (4) or double word (8) alignment */
